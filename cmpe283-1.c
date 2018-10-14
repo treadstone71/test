@@ -227,10 +227,12 @@ detect_vmx_features(void)
                 pr_info("Procbased Controls MSR: 0x%llx\n", (uint64_t)(lo | (uint64_t)hi << 32));
                 report_capability(procbased, 21, lo, hi);
 
-		/*procbased2 controls*/
-                rdmsr(IA32_VMX_PROCBASED_CTLS2, lo, hi);
-                pr_info("Secondary Procbased Controls MSR: 0x%llx\n", (uint64_t)(lo | (uint64_t)hi << 32));
-                report_capability(procbased_ctls2, 23, lo, hi);
+		if( (hi>>31) & 1 ){
+			/*procbased2 controls*/
+                	rdmsr(IA32_VMX_PROCBASED_CTLS2, lo, hi);
+                	pr_info("Secondary Procbased Controls MSR: 0x%llx\n", (uint64_t)(lo | (uint64_t)hi << 32));
+                	report_capability(procbased_ctls2, 23, lo, hi);
+		}
 
 		/*exit controls*/
                 rdmsr(IA32_VMX_EXIT_CTLS, lo, hi);
